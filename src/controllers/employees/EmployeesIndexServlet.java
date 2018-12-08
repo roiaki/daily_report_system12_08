@@ -39,19 +39,27 @@ public class EmployeesIndexServlet extends HttpServlet {
         try{
             page = Integer.parseInt(request.getParameter("page"));
         } catch(NumberFormatException e) { }
+
+        //setFirstResult 何件目から取得するかの指定、setMaxResults　何件取得するかの指定
+        //setFirstResult(15 * (1 - 1)) 0件から15件（0~14のデータ）　setFirstResult(15 * (2 - 1)) 15件目から15件のデータ
+
         List<Employee> employees = em.createNamedQuery("getAllEmployees", Employee.class)
                                      .setFirstResult(15 * (page - 1))
                                      .setMaxResults(15)
                                      .getResultList();
 
+        //検索結果が1件の場合　getSingleResultを使用する、
+        //もしエンティティが複数件取得できた場合はNonUniqueResultExceptionがスローされる
         long employees_count = (long)em.createNamedQuery("getEmployeesCount", Long.class)
                                        .getSingleResult();
 
         em.close();
 
+        //リクエストスコープに保存
         request.setAttribute("employees", employees);
         request.setAttribute("employees_count", employees_count);
         request.setAttribute("page", page);
+        
         if(request.getSession().getAttribute("flush") != null) {
             request.setAttribute("flush", request.getSession().getAttribute("flush"));
             request.getSession().removeAttribute("flush");

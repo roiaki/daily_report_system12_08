@@ -52,10 +52,10 @@ public class LoginFilter implements Filter {
                     return;
                 }
 
-                if(servlet_path.matches("/employees.*") && e.getAdmin_flag() == 0) {
-                    ((HttpServletResponse)response).sendRedirect(context_path + "/");
-                    return;
-                }
+//                if(servlet_path.matches("/employees.*") && e.getAdmin_flag() == 0) {
+//                    ((HttpServletResponse)response).sendRedirect(context_path + "/");
+//                    return;
+//                }
             } else {
                 if(e != null) {
                     ((HttpServletResponse)response).sendRedirect(context_path + "/");
